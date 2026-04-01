@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Sword } from 'lucide-react'
+import Image from 'next/image'
 
 const SERVER_IP = 'play.oneforall.social'
 
@@ -14,7 +14,13 @@ export default function Footer() {
               href="/"
               className="flex items-center gap-2 font-bold text-lg tracking-tight text-foreground w-fit"
             >
-              <Sword className="w-5 h-5 text-primary" />
+              <Image
+                src="/images/logo.png"
+                alt="One For All SMP"
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
               <span>
                 ONE <span className="text-primary">FOR ALL</span>
               </span>
@@ -62,6 +68,12 @@ export default function Footer() {
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Rules
+              </a>
+              <a
+                href="#suggest"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Suggest / Feedback
               </a>
               <a
                 href="https://discord.gg/oneforall"

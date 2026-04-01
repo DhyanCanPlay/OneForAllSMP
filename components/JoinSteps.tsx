@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Monitor, List, PlusCircle, LogIn } from 'lucide-react'
+import { Monitor, List, PlusCircle, LogIn, Link2 } from 'lucide-react'
 
 const SERVER_IP = 'play.oneforall.social'
 
@@ -38,6 +38,29 @@ const steps = [
       </>
     ),
   },
+  {
+    number: '05',
+    icon: Link2,
+    title: 'Link Your Discord',
+    description: (
+      <>
+        In our{' '}
+        <a
+          href="https://discord.gg/oneforall"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#5865F2] hover:underline"
+        >
+          Discord server
+        </a>
+        , run{' '}
+        <span className="font-mono text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
+          /link
+        </span>{' '}
+        and follow the instructions to connect your Minecraft account for roles and perks.
+      </>
+    ),
+  },
 ]
 
 export default function JoinSteps() {
@@ -69,6 +92,7 @@ export default function JoinSteps() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {steps.map((step, i) => {
             const Icon = step.icon
+            const isLastOdd = i === steps.length - 1 && steps.length % 2 !== 0
             return (
               <motion.div
                 key={step.number}
@@ -76,7 +100,7 @@ export default function JoinSteps() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="flex gap-4 p-6 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors"
+                className={`flex gap-4 p-6 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors${isLastOdd ? ' md:col-span-2 md:max-w-md md:mx-auto md:w-full' : ''}`}
               >
                 {/* Step icon + number */}
                 <div className="flex-shrink-0">

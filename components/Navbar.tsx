@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Sword } from 'lucide-react'
+import Image from 'next/image'
+import { Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const navLinks = [
@@ -10,6 +11,7 @@ const navLinks = [
   { label: 'How to Join', href: '#join' },
   { label: 'Gallery', href: '#gallery' },
   { label: 'Rules', href: '#rules' },
+  { label: 'Suggest', href: '#suggest' },
 ]
 
 export default function Navbar() {
@@ -36,7 +38,13 @@ export default function Navbar() {
           href="/"
           className="flex items-center gap-2 font-bold text-lg tracking-tight text-foreground hover:text-primary transition-colors"
         >
-          <Sword className="w-5 h-5 text-primary" />
+          <Image
+            src="/images/logo.png"
+            alt="One For All SMP"
+            width={32}
+            height={32}
+            className="rounded-full"
+          />
           <span>
             ONE <span className="text-primary">FOR ALL</span>
           </span>

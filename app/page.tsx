@@ -5,6 +5,7 @@ import JoinSteps from '@/components/JoinSteps'
 import ServerStatus from '@/components/ServerStatus'
 import GalleryGrid from '@/components/GalleryGrid'
 import RulesList from '@/components/RulesList'
+import SuggestionsSection from '@/components/SuggestionsSection'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
       <ServerStatus />
       <GalleryGrid />
       <RulesList />
+      <SuggestionsSection />
       <Footer />
     </main>
   )
