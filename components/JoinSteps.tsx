@@ -10,7 +10,7 @@ const steps = [
     number: '01',
     icon: Monitor,
     title: 'Open Minecraft',
-    description: 'Launch Minecraft Java Edition. Any recent version works — we keep up with updates.',
+    description: 'Launch Minecraft Java Edition (1.21.x–26.1.x) or Bedrock (Latest).',
   },
   {
     number: '02',
@@ -46,18 +46,14 @@ const steps = [
       <>
         In our{' '}
         <a
-          href="https://discord.gg/oneforall"
+          href="https://discord.com/channels/1471609304950898802/1487212540306915572"
           target="_blank"
           rel="noopener noreferrer"
           className="text-[#5865F2] hover:underline"
         >
-          Discord server
+          #link-account channel
         </a>
-        , run{' '}
-        <span className="font-mono text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">
-          /link
-        </span>{' '}
-        and follow the instructions to connect your Minecraft account for roles and perks.
+        , follow the instructions there to connect your Minecraft account for roles and perks.
       </>
     ),
   },
@@ -132,6 +128,22 @@ export default function JoinSteps() {
           <p className="font-mono text-xl font-bold text-primary tracking-wide text-glow">
             {SERVER_IP}
           </p>
+        </motion.div>
+        {/* Bedrock quick-add button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="mt-4 text-center"
+        >
+          <a
+            href="minecraft://?addExternalServer=One%20For%20All|play.oneforall.social:19132"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-green-600 hover:bg-green-700 text-white font-semibold text-sm transition-colors"
+          >
+            Add to Bedrock
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+          </a>
         </motion.div>
       </div>
     </section>

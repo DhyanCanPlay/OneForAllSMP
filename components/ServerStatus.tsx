@@ -2,10 +2,11 @@
 
 import useSWR from 'swr'
 import { motion } from 'framer-motion'
-import { Users, Wifi, WifiOff, Server } from 'lucide-react'
+import { Users, Wifi, WifiOff, Server, Wrench } from 'lucide-react'
 
 interface ServerStatus {
   online: boolean
+  maintenance?: boolean
   players: { online: number; max: number }
   version: string
   motd: string
@@ -20,6 +21,7 @@ export default function ServerStatus() {
   })
 
   const online = !error && data?.online
+  const maintenance = online && data?.maintenance
 
   return (
     <section className="py-20 px-6 max-w-6xl mx-auto">
@@ -58,19 +60,25 @@ export default function ServerStatus() {
             </div>
           ) : (
             <>
-              {/* Online/Offline banner */}
+              {/* Online/Offline/Maintenance banner */}
               <div className="flex items-center justify-between mb-8 pb-6 border-b border-border">
                 <div className="flex items-center gap-3">
                   <div
                     className={`w-3 h-3 rounded-full ${
+                      maintenance ? 'bg-amber-500 animate-pulse' :
                       online ? 'bg-primary animate-pulse' : 'bg-red-500'
                     }`}
                   />
-                  <span className={`font-bold text-lg ${online ? 'text-primary' : 'text-red-400'}`}>
-                    {online ? 'Online' : 'Offline'}
+                  <span className={`font-bold text-lg ${
+                    maintenance ? 'text-amber-500' :
+                    online ? 'text-primary' : 'text-red-400'
+                  }`}>
+                    {maintenance ? 'Maintenance' : online ? 'Online' : 'Offline'}
                   </span>
                 </div>
-                {online ? (
+                {maintenance ? (
+                  <Wrench className="w-5 h-5 text-amber-500" />
+                ) : online ? (
                   <Wifi className="w-5 h-5 text-primary" />
                 ) : (
                   <WifiOff className="w-5 h-5 text-red-400" />
@@ -78,7 +86,7 @@ export default function ServerStatus() {
               </div>
 
               {/* Stats grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {/* Players */}
                 <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-secondary border border-border">
                   <Users className="w-5 h-5 text-primary" />
@@ -91,23 +99,26 @@ export default function ServerStatus() {
                   <span className="text-xs text-muted-foreground uppercase tracking-wider">Players</span>
                 </div>
 
-                {/* Version */}
-                <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-secondary border border-border">
-                  <Server className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-bold text-foreground text-center">
-                    {data?.version ?? '—'}
-                  </span>
-                  <span className="text-xs text-muted-foreground uppercase tracking-wider">Version</span>
-                </div>
-
+               
                 {/* IP */}
                 <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-secondary border border-border">
-                  <div className="w-5 h-5 text-primary font-mono font-bold text-xs flex items-center">IP</div>
-                  <span className="text-sm font-mono font-bold text-primary text-center break-all">
+                  <div className="w-5 h-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-mono font-bold text-[10px]">IP</div>
+                  <span className="text-sm font-mono font-bold text-primary text-center break-words">
                     {data?.ip ?? 'play.oneforall.social'}
                   </span>
                   <span className="text-xs text-muted-foreground uppercase tracking-wider">Address</span>
                 </div>
+              </div>
+
+              {/* Add to Bedrock Action */}
+              <div className="mt-8 flex justify-center">
+                <a
+                  href="minecraft://?addExternalServer=One%20For%20All|play.oneforall.social:19132"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-green-600 hover:bg-green-700 text-white font-semibold text-sm transition-colors"
+                >
+                  Add to Bedrock
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                </a>
               </div>
 
               <p className="text-center text-xs text-muted-foreground mt-6">

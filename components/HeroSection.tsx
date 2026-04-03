@@ -56,7 +56,7 @@ export default function HeroSection() {
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono tracking-widest uppercase mb-6"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          Java Edition · 1.21.4
+          Java 1.21.x–26.1.x & Bedrock Latest
         </motion.div>
 
         {/* Title */}
@@ -124,7 +124,14 @@ export default function HeroSection() {
             <ExternalLink className="w-4 h-4" />
           </a>
           <a
-            href="https://discord.gg/oneforall"
+            href="minecraft://?addExternalServer=One%20For%20All|play.oneforall.social:19132"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-green-600 hover:bg-green-700 text-white font-semibold text-sm transition-colors"
+          >
+            Add to Bedrock
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+          </a>
+          <a
+            href="https://discord.oneforall.social"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold text-sm transition-colors"

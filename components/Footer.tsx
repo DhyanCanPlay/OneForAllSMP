@@ -36,7 +36,7 @@ export default function Footer() {
               Server
             </h3>
             <p className="font-mono text-primary font-bold">{SERVER_IP}</p>
-            <p className="text-sm text-muted-foreground">Java Edition · 1.21.4</p>
+            <p className="text-sm text-muted-foreground">Java 1.21.x–26.1.x & Bedrock Latest</p>
           </div>
 
           {/* Links */}
@@ -76,7 +76,7 @@ export default function Footer() {
                 Suggest / Feedback
               </a>
               <a
-                href="https://discord.gg/oneforall"
+                href="https://discord.oneforall.social"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-[#5865F2] hover:text-[#7289da] transition-colors"
@@ -88,12 +88,12 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-border/50 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border-t border-border/50 pt-8 flex flex-col items-center gap-3 text-center">
           <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} One For All SMP. All rights reserved.
           </p>
-          <p className="text-xs text-muted-foreground">
-            Not affiliated with Mojang Studios or Microsoft.
+          <p className="text-[10px] text-muted-foreground/40 tracking-wider font-medium uppercase">
+            Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.
           </p>
         </div>
       </div>
