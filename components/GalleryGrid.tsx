@@ -4,12 +4,12 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const images = [
-  { src: '/images/gallery-1.jpg', alt: 'Player base at dusk' },
-  { src: '/images/gallery-2.jpg', alt: 'Underground mine exploration' },
-  { src: '/images/gallery-3.jpg', alt: 'Epic cliffside city' },
+  { src: '/images/building1.png', alt: 'Building Base' },
+  { src: '/images/exploring1.png', alt: 'Epic cliffside city' },
   { src: '/images/gallery-4.jpg', alt: 'Player village settlement' },
-  { src: '/images/gallery-5.jpg', alt: 'Dragon battle in The End' },
-  { src: '/images/gallery-6.jpg', alt: 'Peaceful survival farm' },
+  { src: '/images/fighting_ender_dragon.png', alt: 'Dragon battle in The End' },
+  { src: '/images/exploring2.png', alt: 'Deep cave expedition' },
+  { src: '/images/fighting1.png', alt: 'Combat encounter in survival mode' },
 ]
 
 export default function GalleryGrid() {
