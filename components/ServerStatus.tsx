@@ -104,7 +104,7 @@ export default function ServerStatus() {
                 <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-secondary border border-border">
                   <div className="w-5 h-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-mono font-bold text-[10px]">IP</div>
                   <span className="text-sm font-mono font-bold text-primary text-center break-words">
-                    {data?.ip ?? 'play.oneforall.social'}
+                    {'play.oneforall.social'}
                   </span>
                   <span className="text-xs text-muted-foreground uppercase tracking-wider">Address</span>
                 </div>
