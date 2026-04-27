@@ -18,7 +18,7 @@ export default function Home() {
       <ServerStatus />
       <GalleryGrid />
       <RulesList />
-      <SuggestionsSection />
+     // <SuggestionsSection />
       <Footer />
     </main>
   )
