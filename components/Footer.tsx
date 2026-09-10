@@ -76,7 +76,7 @@ export default function Footer() {
                 Suggest / Feedback
               </a>
               <a
-                href="https://discord.oneforall.social"
+                href="https://discord.gg/oneforall"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-[#5865F2] hover:text-[#7289da] transition-colors"

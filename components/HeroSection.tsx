@@ -124,14 +124,14 @@ export default function HeroSection() {
             <ExternalLink className="w-4 h-4" />
           </a>
           <a
-            href="minecraft://?addExternalServer=One%20For%20All|play.oneforall.social:19132"
+            href="minecraft://?addExternalServer=One%20For%20All|play.oneforall.social:5358"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-green-600 hover:bg-green-700 text-white font-semibold text-sm transition-colors"
           >
             Add to Bedrock
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
           </a>
           <a
-            href="https://discord.oneforall.social"
+            href="https://discord.gg/oneforall"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold text-sm transition-colors"

@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar'
+import EventBar from '@/components/EventBar'
 import HeroSection from '@/components/HeroSection'
 import FeaturesSection from '@/components/FeaturesSection'
 import JoinSteps from '@/components/JoinSteps'
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
+      <EventBar />
       <HeroSection />
       <FeaturesSection />
       <JoinSteps />

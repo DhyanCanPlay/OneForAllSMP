@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Wrench, BookOpen, Link2, ExternalLink } from 'lucide-react'
 
-const DISCORD_LINK = 'https://discord.oneforall.social'
+const DISCORD_LINK = 'https://discord.gg/oneforall'
 const FORM_URL =
   'https://docs.google.com/forms/d/e/1FAIpQLScIKmfGQEoxR_Av0mbzuEmNVwIsxE_RxDrs1bN3jt5fHK56hg/viewform?embedded=true'
 

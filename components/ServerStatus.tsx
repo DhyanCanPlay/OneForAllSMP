@@ -113,7 +113,7 @@ export default function ServerStatus() {
               {/* Add to Bedrock Action */}
               <div className="mt-8 flex justify-center">
                 <a
-                  href="minecraft://?addExternalServer=One%20For%20All|play.oneforall.social:19132"
+                  href="minecraft://?addExternalServer=One%20For%20All|play.oneforall.social:5358"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-green-600 hover:bg-green-700 text-white font-semibold text-sm transition-colors"
                 >
                   Add to Bedrock
