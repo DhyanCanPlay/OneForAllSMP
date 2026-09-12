@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
+import { PartyPopper, X } from 'lucide-react'
 
 export default function EventBar() {
   const [visible, setVisible] = useState(true)
@@ -17,13 +17,12 @@ export default function EventBar() {
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-16 left-0 right-0 z-40 bg-primary/10 border-b border-primary/25"
+          className="fixed top-16 left-0 right-0 z-40 bg-amber-500/10 border-b border-amber-500/25"
         >
           <div className="max-w-6xl mx-auto px-6 py-2.5 flex items-center justify-center gap-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse flex-shrink-0" />
+            <PartyPopper className="w-4 h-4 text-amber-400 flex-shrink-0" />
             <p className="text-sm text-foreground text-center">
-              There is a gift from localhost and it&apos;s a pickaxe{' '}
-              <span aria-hidden="true">⛏</span>
+              The Treasure Hunt event has ended. See you at the next one!
             </p>
             <button
               onClick={() => setVisible(false)}

@@ -1,159 +1,118 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, Unlock, MapPin } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { PartyPopper, MapPin, Lock, Sparkles } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
-const AES_KEY = 'SMP-EVENT-2026-NOTAPICK'
-const COORDINATES = { x: '1XXX', y: 'XX', z: '2XXX' }
+function PixelBlock({ className, delay = 0 }: { className?: string; delay?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0, rotate: -180 }}
+      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+      transition={{ delay, duration: 0.5, type: 'spring', stiffness: 200 }}
+      className={`absolute ${className}`}
+    />
+  )
+}
 
 export default function FindMyChestPage() {
-  const [input, setInput] = useState('')
-  const [unlocked, setUnlocked] = useState(false)
-  const [error, setError] = useState(false)
-
-  const handleUnlock = () => {
-    if (input.trim() === AES_KEY) {
-      setUnlocked(true)
-      setError(false)
-    } else {
-      setError(true)
-      setUnlocked(false)
-    }
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleUnlock()
-  }
-
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-background text-foreground flex flex-col justify-between selection:bg-primary selection:text-primary-foreground">
       <Navbar />
-      <section className="min-h-screen flex items-center justify-center px-6 pt-24 pb-12">
-        <div className="max-w-lg w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-center mb-8"
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono tracking-widest uppercase mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              Treasure Awaits
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-foreground text-glow">
-              Find My Chest
-            </h1>
-          </motion.div>
 
+      <section className="relative flex-1 flex items-center justify-center px-6 pt-28 pb-16 overflow-hidden">
+        {/* Background shapes */}
+        <PixelBlock delay={0.1} className="top-16 left-[10%] w-6 h-6 bg-amber-500/15 rotate-12 border border-amber-500/20 hidden lg:block" />
+        <PixelBlock delay={0.2} className="top-28 right-[14%] w-4 h-4 bg-emerald-500/15 -rotate-6 border border-emerald-500/20 hidden lg:block" />
+        <PixelBlock delay={0.15} className="bottom-20 left-[12%] w-5 h-5 bg-amber-500/15 rotate-45 border border-amber-500/20 hidden lg:block" />
+        <PixelBlock delay={0.25} className="bottom-28 right-[10%] w-7 h-7 bg-emerald-400/10 -rotate-12 border border-emerald-400/15 hidden lg:block" />
+
+        <div className="absolute top-10 left-[22%] text-amber-500/10 text-6xl font-black select-none pointer-events-none hidden lg:block">+</div>
+        <div className="absolute bottom-16 right-[18%] text-emerald-500/10 text-6xl font-black select-none pointer-events-none hidden lg:block">+</div>
+
+        <div className="max-w-lg w-full text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="p-8 rounded-xl bg-card border border-border"
+            transition={{ duration: 0.5 }}
+            className="text-center mb-8"
           >
-            <AnimatePresence mode="wait">
-              {!unlocked ? (
-                <motion.div
-                  key="input"
-                  initial={{ opacity: 1 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="space-y-6"
-                >
-                  <div className="text-center">
-                    <Lock className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-                    <p className="text-sm text-muted-foreground">
-                      Enter the secret key to unlock the chest coordinates.
-                    </p>
-                  </div>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs font-mono tracking-widest uppercase mb-4 shadow-sm">
+              <PartyPopper className="w-3.5 h-3.5" />
+              Event Concluded
+            </div>
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground text-glow mb-3">
+              Find My Chest
+            </h1>
+            <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto mb-6">
+              The chest has been found and the hunt is over. See you at the next event!
+            </p>
+          </motion.div>
 
-                  <div>
-                    <label htmlFor="secret-key" className="sr-only">
-                      Secret Key
-                    </label>
-                    <input
-                      id="secret-key"
-                      type="text"
-                      value={input}
-                      onChange={(e) => {
-                        setInput(e.target.value)
-                        setError(false)
-                      }}
-                      onKeyDown={handleKeyDown}
-                      placeholder="Enter secret key..."
-                      className={`w-full px-4 py-3 rounded-lg bg-background border font-mono text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
-                        error
-                          ? 'border-destructive focus:ring-destructive/50'
-                          : 'border-border'
-                      }`}
-                    />
-                    {error && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-2 text-xs text-destructive"
-                      >
-                        Invalid key. Try again.
-                      </motion.p>
-                    )}
-                  </div>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.5 }}
+            className="relative rounded-2xl bg-card/90 backdrop-blur-xl border border-border/80 shadow-2xl overflow-hidden mb-8"
+          >
+            <div className="flex items-center justify-between px-5 py-3 border-b border-border/60 bg-secondary/30 text-xs font-mono text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Lock className="w-3.5 h-3.5 text-muted-foreground/60" />
+                <span>chest_hunt.bin</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-500/60" />
+                <span>CLAIMED</span>
+              </div>
+            </div>
 
-                  <button
-                    onClick={handleUnlock}
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-primary hover:bg-primary/80 text-primary-foreground font-semibold text-sm transition-all glow-green-sm"
-                  >
-                    <Unlock className="w-4 h-4" />
-                    Unlock
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="result"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, ease: 'easeOut' }}
-                  className="text-center space-y-6"
-                >
-                  <div className="w-14 h-14 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center mx-auto">
-                    <MapPin className="w-7 h-7 text-primary" />
-                  </div>
+            <div className="p-7 md:p-10 text-center">
+              <div className="mb-2 flex justify-center">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-400 border border-amber-500/25">
+                  <MapPin className="w-6 h-6" />
+                </div>
+              </div>
 
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-widest font-mono mb-3">
-                      Chest Coordinates
-                    </p>
-                    <div className="flex items-center justify-center gap-3 font-mono text-2xl md:text-3xl font-bold text-primary text-glow">
-                      <span>X: {COORDINATES.x}</span>
-                      <span className="text-border">|</span>
-                      <span>Y: {COORDINATES.y}</span>
-                      <span className="text-border">|</span>
-                      <span>Z: {COORDINATES.z}</span>
-                    </div>
-                  </div>
+              <p className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground/70 my-3">
+                Chest Coordinates
+              </p>
 
-                  <div className="pt-2">
-                    <p className="text-lg font-semibold text-foreground">
-                      Go and find it
-                    </p>
-                  </div>
+              <div className="relative py-6 sm:py-8 px-4 sm:px-6 min-h-[96px] sm:min-h-[116px] rounded-xl bg-background/80 border border-border/60 mb-8 flex items-center justify-center">
+                <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold tracking-wider text-amber-500/50 select-all inline-block leading-normal line-through decoration-amber-500/30">
+                  X: 1XXX | Y: XX | Z: 2XXX
+                </p>
+              </div>
 
-                  <button
-                    onClick={() => {
-                      setUnlocked(false)
-                      setInput('')
-                    }}
-                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    Lock again
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+              <p className="text-lg font-semibold text-foreground mb-2">
+                The chest has been found
+              </p>
+              <p className="text-sm text-muted-foreground mb-6">
+                Thanks to everyone who participated in the hunt!
+              </p>
+
+              <a
+                href="https://discord.gg/oneforall"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold text-sm transition-all shadow-lg shadow-[#5865F2]/25 hover:shadow-[#5865F2]/40"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z" />
+                </svg>
+                Join Discord for next event
+                <Sparkles className="w-4 h-4" />
+              </a>
+            </div>
+
+            <div className="px-6 py-3 bg-secondary/20 border-t border-border/50 flex items-center justify-between text-[11px] text-muted-foreground font-mono">
+              <span>STATUS: CLAIMED</span>
+              <span>ONE FOR ALL SMP</span>
+            </div>
           </motion.div>
         </div>
       </section>
+
       <Footer />
     </main>
   )

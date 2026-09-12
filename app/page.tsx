@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar'
 import EventBar from '@/components/EventBar'
 import HeroSection from '@/components/HeroSection'
+import EventOverHero from '@/components/EventOverHero'
 import FeaturesSection from '@/components/FeaturesSection'
 import JoinSteps from '@/components/JoinSteps'
 import ServerStatus from '@/components/ServerStatus'
@@ -15,6 +16,7 @@ export default function Home() {
       <Navbar />
       <EventBar />
       <HeroSection />
+      <EventOverHero />
       <FeaturesSection />
       <JoinSteps />
       <ServerStatus />
