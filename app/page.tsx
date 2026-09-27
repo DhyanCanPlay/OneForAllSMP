@@ -11,7 +11,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 font-bold text-lg tracking-tight">
             <Image
-              src="/images/logo.png"
+              src="https://www.oneforall.social/images/logo.png"
               alt="One For All SMP"
               width={34}
               height={34}
