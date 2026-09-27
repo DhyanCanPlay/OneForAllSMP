@@ -23,7 +23,7 @@ export default function Home() {
           </Link>
           <Link
             href="/download"
-            className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/20 transition-all active:scale-95"
+            className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/20 transition-all active:scale-95 shadow-xs"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download World</span>
@@ -31,19 +31,19 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-20 md:py-28 text-center relative overflow-hidden">
-        {/* Subtle Background Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-primary/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      {/* Hero Section */}
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-20 md:py-24 text-center relative overflow-hidden">
+        {/* Ambient background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] pointer-events-none -z-10" />
 
         <div className="max-w-3xl mx-auto space-y-8">
           {/* Status Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
             <Construction className="w-4 h-4 animate-bounce" />
             <span>Under Construction</span>
           </div>
 
-          {/* Main Titles */}
+          {/* Main Title & Message */}
           <div className="space-y-4">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight">
               Thank You for Playing on <br />
@@ -54,7 +54,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Download Notice Box */}
+          {/* Download Callout Card */}
           <div className="bg-card/40 border border-border/60 rounded-2xl p-6 sm:p-8 backdrop-blur-sm max-w-xl mx-auto space-y-4 shadow-xl">
             <div className="flex items-center justify-center gap-2 text-primary font-bold text-sm">
               <Sparkles className="w-4 h-4" />
@@ -75,8 +75,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Quick specs */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground/80 pt-4">
+          {/* Feature Badges */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground/80 pt-2">
             <div className="flex items-center gap-1.5">
               <HardDrive className="w-3.5 h-3.5 text-primary" />
               <span>Full 6.8 GB World Save</span>
@@ -93,7 +93,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Modern Footer with Big Watermark */}
+      {/* Watermark Footer */}
       <Footer />
     </div>
   )
