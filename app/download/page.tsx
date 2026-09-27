@@ -16,7 +16,6 @@ import {
   ArrowLeft,
   ShieldAlert,
   Sparkles,
-  ExternalLink,
   Check,
   Copy,
 } from 'lucide-react'
@@ -27,7 +26,7 @@ export default function DownloadPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [downloadSuccess, setDownloadSuccess] = useState<boolean>(false)
-  const [personalZipDownloaded, setPersonalZipDownloaded] = useState<boolean>(false)
+  const [downloadedFileName, setDownloadedFileName] = useState<string>('')
   const [copied, setCopied] = useState(false)
 
   const handleDownload = async (e: React.FormEvent) => {
@@ -73,18 +72,20 @@ export default function DownloadPage() {
         return
       }
 
-      // Download the personalized user bundle
+      // Stream download the single merged <username>_world.zip file
+      const fileName = `${username.trim()}_world.zip`
+      setDownloadedFileName(fileName)
+
       const blob = await response.blob()
       const downloadUrl = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = downloadUrl
-      a.download = `${username.trim()}_data.zip`
+      a.download = fileName
       document.body.appendChild(a)
       a.click()
       a.remove()
       window.URL.revokeObjectURL(downloadUrl)
 
-      setPersonalZipDownloaded(true)
       setDownloadSuccess(true)
     } catch (err: any) {
       setError(err?.message || 'Network error occurred while connecting to download edge.')
@@ -133,13 +134,13 @@ export default function DownloadPage() {
           <div className="text-center space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider">
               <FolderDown className="w-3.5 h-3.5" />
-              <span>World & Player Data Download</span>
+              <span>1-Click Singleplayer World Download</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
               Download Your World Save
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Authenticate with your in-game username & password to receive your singleplayer player data and world save.
+              Authenticate with your in-game username & password to download a complete, singleplayer-ready world zip with your exact gear and vaults.
             </p>
           </div>
 
@@ -203,12 +204,12 @@ export default function DownloadPage() {
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Verifying & Generating Player Data...</span>
+                        <span>Merging & Streaming Your World (~6.8 GB)...</span>
                       </>
                     ) : (
                       <>
                         <Download className="w-4 h-4" />
-                        <span>Authenticate & Download Data</span>
+                        <span>Download Complete World ZIP (~6.8 GB)</span>
                       </>
                     )}
                   </button>
@@ -219,109 +220,74 @@ export default function DownloadPage() {
               <div className="border-t border-border/50 pt-5 space-y-2.5 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2 font-semibold text-foreground">
                   <Sparkles className="w-3.5 h-3.5 text-primary" />
-                  <span>Personalized Backup Highlights:</span>
+                  <span>All-In-One ZIP Highlights:</span>
                 </div>
                 <ul className="space-y-1.5 list-disc list-inside pl-1 leading-relaxed">
-                  <li>Your complete inventory, armor, and ender chest.</li>
-                  <li>All your AxVaults converted into Shulker Boxes.</li>
-                  <li>Singleplayer `/trigger vault` menu included.</li>
+                  <li>Single 1-click ZIP file (<code className="font-mono text-primary">&#123;username&#125;_world.zip</code>).</li>
+                  <li>Injected with your exact inventory, armor, and coordinates.</li>
+                  <li>AxVaults converted into Shulker Boxes in your Ender Chest.</li>
+                  <li>Just drag and drop into your <code className="font-mono text-foreground">saves</code> folder and click Play.</li>
                 </ul>
                 <div className="p-3 bg-secondary/30 rounded-lg flex items-center gap-2 text-[11px] text-muted-foreground/80">
                   <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>Downloads are capped at <strong>2 downloads per account</strong>.</span>
+                  <span>Notice: Downloads are capped at <strong>2 downloads per account</strong>.</span>
                 </div>
               </div>
             </div>
           ) : (
-            /* Success & 2-Step Download Manager Card */
+            /* Download Started / Success Card */
             <div className="bg-card/50 border border-primary/40 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-2xl space-y-6 animate-in fade-in-50">
               <div className="flex items-center gap-3 text-emerald-400">
                 <CheckCircle2 className="w-6 h-6 shrink-0" />
                 <div>
-                  <h3 className="font-bold text-base">Authentication Successful!</h3>
-                  <p className="text-xs text-muted-foreground">Welcome back, {username}. Follow the steps below to play.</p>
+                  <h3 className="font-bold text-base">Your Download Has Started!</h3>
+                  <p className="text-xs text-muted-foreground">Downloading <code className="text-foreground font-mono">{downloadedFileName}</code> (~6.8 GB)</p>
                 </div>
               </div>
 
-              <div className="space-y-4">
-                {/* Step 1: Base World Download */}
-                <div className="p-4 rounded-xl bg-secondary/40 border border-border/60 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-primary">Step 1</span>
-                    <span className="text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded font-mono font-semibold">6.76 GB</span>
-                  </div>
-                  <h4 className="text-sm font-bold text-foreground">Download Base World Save</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Contains the full server terrain, Overworld, Nether, End, all builds, and structures.
-                  </p>
-                  <div className="pt-1">
-                    <a
-                      href="https://world.oneforall.social/base_world.zip"
-                      download="base_world.zip"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-all shadow"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Download Base World (.zip)</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Step 2: Player Data Download */}
-                <div className="p-4 rounded-xl bg-secondary/40 border border-border/60 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-primary">Step 2</span>
-                    <span className="text-[11px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-mono font-semibold">Downloaded ✓</span>
-                  </div>
-                  <h4 className="text-sm font-bold text-foreground">Your Player Data ({username}_data.zip)</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Contains your personalized <code className="text-primary font-mono">level.dat</code>, stats, and achievements.
-                  </p>
-                  <button
-                    onClick={handleDownload}
-                    className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-4"
-                  >
-                    Click here if download didn't start automatically
-                  </button>
-                </div>
-
-                {/* Step 3: Installation Instructions */}
-                <div className="p-4 rounded-xl bg-secondary/20 border border-border/40 space-y-2 text-xs text-muted-foreground">
-                  <h5 className="font-bold text-foreground flex items-center gap-1.5">
-                    <HardDrive className="w-3.5 h-3.5 text-primary" />
-                    <span>How to Install in Singleplayer:</span>
-                  </h5>
-                  <ol className="list-decimal list-inside space-y-1.5 pl-1 leading-relaxed">
-                    <li>
-                      Extract <code className="text-foreground font-mono">base_world.zip</code> into your Minecraft saves folder:
-                      <div className="mt-1.5 flex items-center gap-2">
-                        <code className="bg-background px-2.5 py-1 rounded text-[11px] text-foreground font-mono select-all">
-                          %appdata%\.minecraft\saves\OneForAll_World
-                        </code>
-                        <button
-                          onClick={copyPath}
-                          className="p-1 rounded bg-secondary hover:bg-secondary/80 text-foreground transition-all"
-                          title="Copy path"
-                        >
-                          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                        </button>
-                      </div>
-                    </li>
-                    <li>
-                      Extract <code className="text-foreground font-mono">{username}_data.zip</code> directly into that same folder (click <strong>Replace</strong> when asked to overwrite <code className="text-primary font-mono">level.dat</code>).
-                    </li>
-                    <li>
-                      Launch Minecraft <strong>1.21.x</strong>, open Singleplayer, and enjoy your world!
-                    </li>
-                  </ol>
-                </div>
+              {/* 1-Step Installation Instructions */}
+              <div className="p-5 rounded-xl bg-secondary/30 border border-border/60 space-y-4 text-xs text-muted-foreground">
+                <h5 className="font-bold text-sm text-foreground flex items-center gap-2">
+                  <HardDrive className="w-4 h-4 text-primary" />
+                  <span>How to Play (Drag & Drop):</span>
+                </h5>
+                <ol className="list-decimal list-inside space-y-2.5 pl-1 leading-relaxed">
+                  <li>
+                    Extract your downloaded <code className="text-primary font-mono font-bold">{downloadedFileName}</code> into your Minecraft saves folder:
+                    <div className="mt-2 flex items-center gap-2">
+                      <code className="bg-background px-3 py-1.5 rounded-lg text-xs text-foreground font-mono select-all border border-border">
+                        %appdata%\.minecraft\saves\OneForAll_World
+                      </code>
+                      <button
+                        onClick={copyPath}
+                        className="p-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground transition-all cursor-pointer border border-border"
+                        title="Copy path"
+                      >
+                        {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  </li>
+                  <li>
+                    Open Minecraft <strong>1.21.x</strong>, go to <strong>Singleplayer</strong>, and click <strong>OneForAll_World</strong>.
+                  </li>
+                  <li>
+                    Your inventory, gear, and Ender Chest AxVaults will load automatically!
+                  </li>
+                </ol>
               </div>
 
-              <div className="pt-2 text-center">
+              <div className="pt-2 flex items-center justify-between text-xs">
+                <button
+                  onClick={handleDownload}
+                  className="text-primary hover:underline font-semibold"
+                >
+                  Restart download if cancelled
+                </button>
                 <button
                   onClick={() => setDownloadSuccess(false)}
-                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Download for a different account
+                  Download for another account
                 </button>
               </div>
             </div>
