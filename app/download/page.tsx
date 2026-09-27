@@ -42,43 +42,11 @@ export default function DownloadPage() {
     setLoading(true)
 
     try {
-      // 1. Verify credentials first to give immediate on-screen error feedback
-      const formData = new FormData()
-      formData.append('username', trimmedUser)
-      formData.append('password', password)
-
-      const verifyRes = await fetch('http://api.oneforall.social:8000/api/player-bundle', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!verifyRes.ok) {
-        let errorMsg = ''
-        try {
-          const jsonErr = await verifyRes.json()
-          errorMsg = jsonErr.detail || ''
-        } catch {
-          errorMsg = await verifyRes.text()
-        }
-
-        if (verifyRes.status === 404) {
-          setError(`Username "${trimmedUser}" was not found in the server player database.`)
-        } else if (verifyRes.status === 403) {
-          setError('Invalid in-game password. Please enter the password you used to login on the server.')
-        } else if (verifyRes.status === 429) {
-          setError('Download limit reached. You can only download your world save twice.')
-        } else {
-          setError(errorMsg || `Authentication error (Status ${verifyRes.status}).`)
-        }
-        setLoading(false)
-        return
-      }
-
-      // 2. Build Direct Native Stream URL (Architecture 1)
+      // Direct Native Stream URL (HTTPS via Cloudflare Worker)
       const directStreamUrl = `https://downloadworld.oneforall.social?username=${encodeURIComponent(trimmedUser)}&password=${encodeURIComponent(password)}`
       setDownloadUrl(directStreamUrl)
 
-      // 3. Trigger native browser stream download directly to disk (bypasses all JS memory limits)
+      // Trigger native browser stream download
       const downloadLink = document.createElement('a')
       downloadLink.href = directStreamUrl
       downloadLink.download = `${trimmedUser}_world.zip`
@@ -88,7 +56,7 @@ export default function DownloadPage() {
 
       setDownloadSuccess(true)
     } catch (err: any) {
-      setError('Unable to reach server. Please check your internet connection.')
+      setError('Unable to initiate download. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -204,7 +172,7 @@ export default function DownloadPage() {
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Verifying & Initiating Stream (~6.8 GB)...</span>
+                        <span>Initiating Download Stream (~6.8 GB)...</span>
                       </>
                     ) : (
                       <>
@@ -247,8 +215,8 @@ export default function DownloadPage() {
 
               {/* Drag & Drop Instructions */}
               <div className="p-5 rounded-xl bg-secondary/30 border border-border/60 space-y-4 text-xs text-muted-foreground">
-                <h5 className="font-bold text-sm text-foreground flex items-center gap-2">
-                  <HardDrive className="w-4 h-4 text-primary" />
+                <h5 className="font-bold text-sm text-foreground flex items-center gap-1.5">
+                  <HardDrive className="w-3.5 h-3.5 text-primary" />
                   <span>How to Play (Drag & Drop):</span>
                 </h5>
                 <ol className="list-decimal list-inside space-y-2.5 pl-1 leading-relaxed">
