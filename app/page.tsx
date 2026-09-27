@@ -1,28 +1,100 @@
-import Navbar from '@/components/Navbar'
-import EventBar from '@/components/EventBar'
-import HeroSection from '@/components/HeroSection'
-import EventOverHero from '@/components/EventOverHero'
-import FeaturesSection from '@/components/FeaturesSection'
-import JoinSteps from '@/components/JoinSteps'
-import ServerStatus from '@/components/ServerStatus'
-import GalleryGrid from '@/components/GalleryGrid'
-import RulesList from '@/components/RulesList'
-import SuggestionsSection from '@/components/SuggestionsSection'
+import Link from 'next/link'
+import Image from 'next/image'
 import Footer from '@/components/Footer'
+import { Download, Sparkles, Server, HardDrive, ArrowRight, Construction } from 'lucide-react'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <Navbar />
-      <EventBar />
-      <HeroSection />
-      <EventOverHero />
-      <FeaturesSection />
-      <JoinSteps />
-      <ServerStatus />
-      <GalleryGrid />
-      <RulesList />
+    <div className="min-h-screen bg-background text-foreground flex flex-col justify-between selection:bg-primary/20 selection:text-primary">
+      {/* Header */}
+      <header className="border-b border-border/40 bg-card/10 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 font-bold text-lg tracking-tight">
+            <Image
+              src="/images/logo.png"
+              alt="One For All SMP"
+              width={34}
+              height={34}
+              className="rounded-full ring-1 ring-primary/30"
+            />
+            <span>
+              ONE <span className="text-primary">FOR ALL</span>
+            </span>
+          </Link>
+          <Link
+            href="/download"
+            className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/20 transition-all active:scale-95"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Download World</span>
+          </Link>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-20 md:py-28 text-center relative overflow-hidden">
+        {/* Subtle Background Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-primary/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+
+        <div className="max-w-3xl mx-auto space-y-8">
+          {/* Status Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            <Construction className="w-4 h-4 animate-bounce" />
+            <span>Under Construction</span>
+          </div>
+
+          {/* Main Titles */}
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight">
+              Thank You for Playing on <br />
+              <span className="text-primary text-glow">One For All SMP</span>
+            </h1>
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+              Our server season has officially concluded. To all 552 players who built towns, conquered dungeons, and forged friendships — thank you for being a part of this journey.
+            </p>
+          </div>
+
+          {/* Download Notice Box */}
+          <div className="bg-card/40 border border-border/60 rounded-2xl p-6 sm:p-8 backdrop-blur-sm max-w-xl mx-auto space-y-4 shadow-xl">
+            <div className="flex items-center justify-center gap-2 text-primary font-bold text-sm">
+              <Sparkles className="w-4 h-4" />
+              <span>World Archive Available</span>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              You can now download the complete singleplayer world save customized with your exact player inventory, armor, stats, and AxVaults ready to play.
+            </p>
+            <div className="pt-2">
+              <Link
+                href="/download"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-lg hover:bg-primary/90 glow-green transition-all transform active:scale-95"
+              >
+                <Download className="w-4 h-4" />
+                <span>Go to Download Page</span>
+                <ArrowRight className="w-4 h-4 opacity-70" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick specs */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground/80 pt-4">
+            <div className="flex items-center gap-1.5">
+              <HardDrive className="w-3.5 h-3.5 text-primary" />
+              <span>Full 6.8 GB World Save</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Server className="w-3.5 h-3.5 text-primary" />
+              <span>Overworld • Nether • End</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
+              <span>Minecraft 1.21.x Ready</span>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Modern Footer with Big Watermark */}
       <Footer />
-    </main>
+    </div>
   )
 }
