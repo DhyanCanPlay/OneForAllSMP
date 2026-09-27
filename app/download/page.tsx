@@ -29,7 +29,7 @@ export default function DownloadPage() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
-  const handleDownload = async (e: React.FormEvent) => {
+  const handleDownload = (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
 
@@ -42,43 +42,11 @@ export default function DownloadPage() {
     setLoading(true)
 
     try {
-      // 1. Verify credentials first with Oracle backend API
-      const formData = new FormData()
-      formData.append('username', trimmedUser)
-      formData.append('password', password)
-
-      const verifyRes = await fetch('http://api.oneforall.social:8000/api/player-bundle', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!verifyRes.ok) {
-        let errorMsg = ''
-        try {
-          const jsonErr = await verifyRes.json()
-          errorMsg = jsonErr.detail || ''
-        } catch {
-          errorMsg = await verifyRes.text()
-        }
-
-        if (verifyRes.status === 404) {
-          setError(`Username "${trimmedUser}" was not found in the player database.`)
-        } else if (verifyRes.status === 403) {
-          setError('Invalid in-game password. Please enter the password you used to login on the server.')
-        } else if (verifyRes.status === 429) {
-          setError('Download limit reached. You can only download your world save twice.')
-        } else {
-          setError(errorMsg || `Authentication error (Status ${verifyRes.status}).`)
-        }
-        setLoading(false)
-        return
-      }
-
-      // 2. Build direct single-file stream URL (Entire 6.76 GB in ONE ZIP file)
+      // Direct Native Stream URL (100% HTTPS via Cloudflare Worker)
       const directStreamUrl = `https://downloadworld.oneforall.social?username=${encodeURIComponent(trimmedUser)}&password=${encodeURIComponent(password)}`
       setDownloadUrl(directStreamUrl)
 
-      // 3. Trigger direct browser download of the full 6.76 GB world ZIP
+      // Trigger native browser stream download
       const downloadLink = document.createElement('a')
       downloadLink.href = directStreamUrl
       downloadLink.download = `${trimmedUser}_world.zip`
@@ -88,7 +56,7 @@ export default function DownloadPage() {
 
       setDownloadSuccess(true)
     } catch (err: any) {
-      setError('Unable to reach server. Please check your internet connection.')
+      setError('Unable to initiate download. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -204,7 +172,7 @@ export default function DownloadPage() {
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Verifying & Starting Full 6.8 GB Stream...</span>
+                        <span>Starting Stream (~6.8 GB)...</span>
                       </>
                     ) : (
                       <>
