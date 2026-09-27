@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
@@ -10,7 +10,6 @@ import {
   User,
   AlertCircle,
   CheckCircle2,
-  Loader2,
   HardDrive,
   FolderDown,
   ArrowLeft,
@@ -23,75 +22,19 @@ import {
 export default function DownloadPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [downloadSuccess, setDownloadSuccess] = useState<boolean>(false)
-  const [downloadedFileName, setDownloadedFileName] = useState<string>('')
+  const [downloadStarted, setDownloadStarted] = useState(false)
   const [copied, setCopied] = useState(false)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  const handleDownload = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-
+  const handleSubmit = (e: React.FormEvent) => {
     if (!username.trim()) {
-      setError('Please enter your Minecraft in-game username.')
+      e.preventDefault()
       return
     }
-
-    setLoading(true)
-
-    try {
-      const formData = new FormData()
-      formData.append('username', username.trim())
-      formData.append('password', password)
-
-      const response = await fetch('https://downloadworld.oneforall.social', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!response.ok) {
-        let errorMsg = ''
-        try {
-          const jsonErr = await response.json()
-          errorMsg = jsonErr.detail || ''
-        } catch {
-          errorMsg = await response.text()
-        }
-
-        if (response.status === 404) {
-          setError(`Username "${username}" was not found in the server player database.`)
-        } else if (response.status === 403) {
-          setError('Invalid in-game password. Please enter the password you used to login on the server.')
-        } else if (response.status === 429) {
-          setError('Download limit reached. You can only download your world save twice.')
-        } else {
-          setError(errorMsg || `Failed to download (Error ${response.status}).`)
-        }
-        setLoading(false)
-        return
-      }
-
-      // Stream download the single merged <username>_world.zip file
-      const fileName = `${username.trim()}_world.zip`
-      setDownloadedFileName(fileName)
-
-      const blob = await response.blob()
-      const downloadUrl = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = downloadUrl
-      a.download = fileName
-      document.body.appendChild(a)
-      a.click()
-      a.remove()
-      window.URL.revokeObjectURL(downloadUrl)
-
-      setDownloadSuccess(true)
-    } catch (err: any) {
-      setError(err?.message || 'Network error occurred while connecting to download edge.')
-    } finally {
-      setLoading(false)
-    }
+    // Set UI state to show download instructions
+    setDownloadStarted(true)
+    // The native HTML form submission streams the 6.8 GB file directly
+    // to the browser's download manager with zero memory limits!
   }
 
   const copyPath = () => {
@@ -144,154 +87,127 @@ export default function DownloadPage() {
             </p>
           </div>
 
-          {!downloadSuccess ? (
-            /* Auth Form Card */
-            <div className="bg-card/50 border border-border/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-2xl space-y-6">
-              <form onSubmit={handleDownload} className="space-y-4">
-                {/* Username */}
-                <div className="space-y-2">
+          {/* Form Card (Direct Browser Native Stream) */}
+          <div className="bg-card/50 border border-border/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-2xl space-y-6">
+            <form
+              ref={formRef}
+              action="https://downloadworld.oneforall.social"
+              method="POST"
+              onSubmit={handleSubmit}
+              className="space-y-4"
+            >
+              {/* Username */}
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-primary" />
+                  <span>Minecraft In-Game Nickname</span>
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="e.g. Steve or .BedrockName"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm transition-all"
+                />
+              </div>
+
+              {/* Password */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
                   <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-primary" />
-                    <span>Minecraft In-Game Nickname</span>
+                    <KeyRound className="w-3.5 h-3.5 text-primary" />
+                    <span>In-Game /login Password</span>
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="e.g. Steve or .BedrockName"
-                    disabled={loading}
-                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm transition-all"
-                  />
+                  <span className="text-[11px] text-muted-foreground/60">
+                    Leave blank if Bedrock / No Password
+                  </span>
                 </div>
-
-                {/* Password */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                      <KeyRound className="w-3.5 h-3.5 text-primary" />
-                      <span>In-Game /login Password</span>
-                    </label>
-                    <span className="text-[11px] text-muted-foreground/60">
-                      Leave blank if Bedrock / No Password
-                    </span>
-                  </div>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Your in-game password"
-                    disabled={loading}
-                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm transition-all"
-                  />
-                </div>
-
-                {/* Error Box */}
-                {error && (
-                  <div className="flex items-start gap-3 p-4 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-sm leading-relaxed animate-in fade-in-50">
-                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                    <span>{error}</span>
-                  </div>
-                )}
-
-                {/* Submit Button */}
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-lg hover:bg-primary/90 glow-green transition-all transform active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Merging & Streaming Your World (~6.8 GB)...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Download className="w-4 h-4" />
-                        <span>Download Complete World ZIP (~6.8 GB)</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
-
-              {/* Info Notice */}
-              <div className="border-t border-border/50 pt-5 space-y-2.5 text-xs text-muted-foreground">
-                <div className="flex items-center gap-2 font-semibold text-foreground">
-                  <Sparkles className="w-3.5 h-3.5 text-primary" />
-                  <span>All-In-One ZIP Highlights:</span>
-                </div>
-                <ul className="space-y-1.5 list-disc list-inside pl-1 leading-relaxed">
-                  <li>Single 1-click ZIP file (<code className="font-mono text-primary">&#123;username&#125;_world.zip</code>).</li>
-                  <li>Injected with your exact inventory, armor, and coordinates.</li>
-                  <li>AxVaults converted into Shulker Boxes in your Ender Chest.</li>
-                  <li>Just drag and drop into your <code className="font-mono text-foreground">saves</code> folder and click Play.</li>
-                </ul>
-                <div className="p-3 bg-secondary/30 rounded-lg flex items-center gap-2 text-[11px] text-muted-foreground/80">
-                  <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>Notice: Downloads are capped at <strong>2 downloads per account</strong>.</span>
-                </div>
-              </div>
-            </div>
-          ) : (
-            /* Download Started / Success Card */
-            <div className="bg-card/50 border border-primary/40 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-2xl space-y-6 animate-in fade-in-50">
-              <div className="flex items-center gap-3 text-emerald-400">
-                <CheckCircle2 className="w-6 h-6 shrink-0" />
-                <div>
-                  <h3 className="font-bold text-base">Your Download Has Started!</h3>
-                  <p className="text-xs text-muted-foreground">Downloading <code className="text-foreground font-mono">{downloadedFileName}</code> (~6.8 GB)</p>
-                </div>
+                <input
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Your in-game password"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm transition-all"
+                />
               </div>
 
-              {/* 1-Step Installation Instructions */}
-              <div className="p-5 rounded-xl bg-secondary/30 border border-border/60 space-y-4 text-xs text-muted-foreground">
-                <h5 className="font-bold text-sm text-foreground flex items-center gap-2">
-                  <HardDrive className="w-4 h-4 text-primary" />
-                  <span>How to Play (Drag & Drop):</span>
-                </h5>
-                <ol className="list-decimal list-inside space-y-2.5 pl-1 leading-relaxed">
-                  <li>
-                    Extract your downloaded <code className="text-primary font-mono font-bold">{downloadedFileName}</code> into your Minecraft saves folder:
-                    <div className="mt-2 flex items-center gap-2">
-                      <code className="bg-background px-3 py-1.5 rounded-lg text-xs text-foreground font-mono select-all border border-border">
-                        %appdata%\.minecraft\saves\OneForAll_World
-                      </code>
-                      <button
-                        onClick={copyPath}
-                        className="p-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground transition-all cursor-pointer border border-border"
-                        title="Copy path"
-                      >
-                        {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
-                    </div>
-                  </li>
-                  <li>
-                    Open Minecraft <strong>1.21.x</strong>, go to <strong>Singleplayer</strong>, and click <strong>OneForAll_World</strong>.
-                  </li>
-                  <li>
-                    Your inventory, gear, and Ender Chest AxVaults will load automatically!
-                  </li>
-                </ol>
-              </div>
-
-              <div className="pt-2 flex items-center justify-between text-xs">
+              {/* Submit Button */}
+              <div className="pt-2">
                 <button
-                  onClick={handleDownload}
-                  className="text-primary hover:underline font-semibold"
+                  type="submit"
+                  className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-lg hover:bg-primary/90 glow-green transition-all transform active:scale-95 cursor-pointer"
                 >
-                  Restart download if cancelled
-                </button>
-                <button
-                  onClick={() => setDownloadSuccess(false)}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Download for another account
+                  <Download className="w-4 h-4" />
+                  <span>Download Complete World ZIP (~6.8 GB)</span>
                 </button>
               </div>
+            </form>
+
+            {/* Post-Submit / Download Status & Instructions */}
+            {downloadStarted && (
+              <div className="p-5 rounded-xl bg-secondary/30 border border-primary/40 space-y-4 text-xs text-muted-foreground animate-in fade-in-50">
+                <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                  <CheckCircle2 className="w-5 h-5 shrink-0" />
+                  <span>Download initiated in your browser!</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Your browser is streaming <code className="text-foreground font-mono font-bold">{username.trim()}_world.zip</code> (~6.8 GB). Check your browser's download manager for progress.
+                </p>
+
+                <div className="border-t border-border/50 pt-3 space-y-2">
+                  <h5 className="font-bold text-foreground flex items-center gap-1.5">
+                    <HardDrive className="w-3.5 h-3.5 text-primary" />
+                    <span>How to Install Once Downloaded:</span>
+                  </h5>
+                  <ol className="list-decimal list-inside space-y-2 pl-1 leading-relaxed">
+                    <li>
+                      Extract the downloaded ZIP into your Minecraft saves folder:
+                      <div className="mt-1.5 flex items-center gap-2">
+                        <code className="bg-background px-3 py-1.5 rounded-lg text-xs text-foreground font-mono select-all border border-border">
+                          %appdata%\.minecraft\saves\OneForAll_World
+                        </code>
+                        <button
+                          type="button"
+                          onClick={copyPath}
+                          className="p-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground transition-all cursor-pointer border border-border"
+                          title="Copy path"
+                        >
+                          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        </button>
+                      </div>
+                    </li>
+                    <li>
+                      Open Minecraft <strong>1.21.x</strong>, go to <strong>Singleplayer</strong>, and click <strong>OneForAll_World</strong>.
+                    </li>
+                    <li>
+                      Your inventory, armor, and Ender Chest AxVaults will load automatically!
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            )}
+
+            {/* Info Highlights */}
+            <div className="border-t border-border/50 pt-5 space-y-2.5 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2 font-semibold text-foreground">
+                <Sparkles className="w-3.5 h-3.5 text-primary" />
+                <span>All-In-One ZIP Highlights:</span>
+              </div>
+              <ul className="space-y-1.5 list-disc list-inside pl-1 leading-relaxed">
+                <li>Single 1-click ZIP file (<code className="font-mono text-primary">&#123;username&#125;_world.zip</code>).</li>
+                <li>Injected with your exact inventory, armor, and coordinates.</li>
+                <li>AxVaults converted into Shulker Boxes in your Ender Chest.</li>
+                <li>Overworld, Nether, and End dimensions included.</li>
+              </ul>
+              <div className="p-3 bg-secondary/30 rounded-lg flex items-center gap-2 text-[11px] text-muted-foreground/80">
+                <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Notice: Downloads are capped at <strong>2 downloads per account</strong>.</span>
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </main>
 
