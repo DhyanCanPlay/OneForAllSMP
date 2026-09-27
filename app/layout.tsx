@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   description:
     'Join One For All SMP – a public Minecraft survival server with no chaos, strong community, and active players.',
   keywords: ['Minecraft SMP', 'Public SMP', 'Survival Server', 'No Grief SMP'],
+  icons: {
+    icon: 'https://www.oneforall.social/images/logo.png',
+    shortcut: 'https://www.oneforall.social/images/logo.png',
+    apple: 'https://www.oneforall.social/images/logo.png',
+  },
   openGraph: {
     title: 'One For All SMP | Public Minecraft Server',
     description:
