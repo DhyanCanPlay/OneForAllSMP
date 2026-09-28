@@ -42,8 +42,8 @@ export default function DownloadPage() {
 
     setLoading(true)
 
-    // Using the provided Kamatera server IP
-    const API_BASE = "http://153.76.249.5:3001"
+    // Using the provided Kamatera server IP (now behind a domain + SSL)
+    const API_BASE = "https://api.oneforall.social"
 
     try {
       const res = await fetch(`${API_BASE}/api/create-link`, {
