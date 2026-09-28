@@ -49,7 +49,7 @@ export default function DownloadPage() {
       const res = await fetch(`${API_BASE}/api/create-link`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: trimmedUser }),
+        body: JSON.stringify({ username: trimmedUser, password }),
       })
 
       const data = await res.json()
@@ -177,7 +177,7 @@ export default function DownloadPage() {
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Starting Stream (~6.8 GB)...</span>
+                        <span>Verifying...</span>
                       </>
                     ) : (
                       <>
@@ -213,7 +213,7 @@ export default function DownloadPage() {
               <div className="flex items-center gap-3 text-emerald-400">
                 <CheckCircle2 className="w-6 h-6 shrink-0" />
                 <div>
-                  <h3 className="font-bold text-base">Your world is ready!</h3>
+                  <h3 className="font-bold text-base">Verified!</h3>
                   <p className="text-xs text-muted-foreground">Link expires in 4 hours.</p>
                 </div>
               </div>
