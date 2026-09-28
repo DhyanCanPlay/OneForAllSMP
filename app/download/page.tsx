@@ -29,9 +29,10 @@ export default function DownloadPage() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
-  const handleDownload = (e: React.FormEvent) => {
+  const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setDownloadUrl(null)
 
     const trimmedUser = username.trim()
     if (!trimmedUser) {
@@ -41,22 +42,26 @@ export default function DownloadPage() {
 
     setLoading(true)
 
+    // Using the provided Kamatera server IP
+    const API_BASE = "http://153.76.249.5:3001"
+
     try {
-      // Direct Native Stream URL (100% HTTPS via Cloudflare Worker)
-      const directStreamUrl = `https://downloadworld.oneforall.social?username=${encodeURIComponent(trimmedUser)}&password=${encodeURIComponent(password)}`
-      setDownloadUrl(directStreamUrl)
+      const res = await fetch(`${API_BASE}/api/create-link`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: trimmedUser }),
+      })
 
-      // Trigger native browser stream download
-      const downloadLink = document.createElement('a')
-      downloadLink.href = directStreamUrl
-      downloadLink.download = `${trimmedUser}_world.zip`
-      document.body.appendChild(downloadLink)
-      downloadLink.click()
-      downloadLink.remove()
+      const data = await res.json()
 
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to generate link.")
+      }
+
+      setDownloadUrl(`${API_BASE}${data.downloadUrl}`)
       setDownloadSuccess(true)
     } catch (err: any) {
-      setError('Unable to initiate download. Please try again.')
+      setError(err.message || 'Unable to initiate download. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -108,7 +113,7 @@ export default function DownloadPage() {
               Download Your World Save
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Authenticate with your in-game username & password to download your complete 6.76 GB singleplayer-ready world zip with all your gear and vaults.
+              Authenticate with your in-game username & password to download your complete 6.76 GB singleplayer-ready world archive with all your gear and vaults.
             </p>
           </div>
 
@@ -208,10 +213,21 @@ export default function DownloadPage() {
               <div className="flex items-center gap-3 text-emerald-400">
                 <CheckCircle2 className="w-6 h-6 shrink-0" />
                 <div>
-                  <h3 className="font-bold text-base">Download Started!</h3>
-                  <p className="text-xs text-muted-foreground">Streaming full 6.76 GB file <code className="text-foreground font-mono font-bold">{username.trim()}_world.zip</code> to your browser.</p>
+                  <h3 className="font-bold text-base">Your world is ready!</h3>
+                  <p className="text-xs text-muted-foreground">Link expires in 4 hours.</p>
                 </div>
               </div>
+
+              {downloadUrl && (
+                <div className="mt-4">
+                  <a href={downloadUrl} download={`${username.trim()}_world.tar`}>
+                    <button className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-lg hover:bg-primary/90 glow-green transition-all cursor-pointer">
+                      <Download className="w-4 h-4" />
+                      <span>Start Download (~7.23 GB .tar)</span>
+                    </button>
+                  </a>
+                </div>
+              )}
 
               {/* Drag & Drop Instructions */}
               <div className="p-5 rounded-xl bg-secondary/30 border border-border/60 space-y-4 text-xs text-muted-foreground">
@@ -221,7 +237,7 @@ export default function DownloadPage() {
                 </h5>
                 <ol className="list-decimal list-inside space-y-2.5 pl-1 leading-relaxed">
                   <li>
-                    Extract the downloaded <code className="text-primary font-mono font-bold">{username.trim()}_world.zip</code> directly into your Minecraft saves folder:
+                    Extract the downloaded <code className="text-primary font-mono font-bold">{username.trim()}_world.tar</code> directly into your Minecraft saves folder:
                     <div className="mt-2 flex items-center gap-2">
                       <code className="bg-background px-3 py-1.5 rounded-lg text-xs text-foreground font-mono select-all border border-border">
                         %appdata%\.minecraft\saves\OneForAll_World
@@ -245,16 +261,7 @@ export default function DownloadPage() {
                 </ol>
               </div>
 
-              <div className="pt-2 flex items-center justify-between text-xs">
-                {downloadUrl && (
-                  <a
-                    href={downloadUrl}
-                    download={`${username.trim()}_world.zip`}
-                    className="text-primary hover:underline font-semibold"
-                  >
-                    Click here if download didn't start
-                  </a>
-                )}
+              <div className="pt-2 flex items-center justify-center text-xs">
                 <button
                   onClick={() => setDownloadSuccess(false)}
                   className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
