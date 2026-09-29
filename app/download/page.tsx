@@ -182,7 +182,7 @@ export default function DownloadPage() {
                     ) : (
                       <>
                         <Download className="w-4 h-4" />
-                        <span>Download Complete World ZIP (6.76 GB)</span>
+                        <span>Download Complete World TAR ( a kind of archive ) (12 GB+)</span>
                       </>
                     )}
                   </button>
@@ -223,7 +223,7 @@ export default function DownloadPage() {
                   <a href={downloadUrl} download={`${username.trim()}_world.tar`}>
                     <button className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-lg hover:bg-primary/90 glow-green transition-all cursor-pointer">
                       <Download className="w-4 h-4" />
-                      <span>Start Download (~7.23 GB .tar)</span>
+                      <span>Start Download (12 GB+ tar)</span>
                     </button>
                   </a>
                 </div>
