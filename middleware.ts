@@ -4,10 +4,10 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Allow the home page, the download page, Next.js assets, and static files
+  // Allow the home page, the archives page, Next.js assets, and static files
   if (
     pathname === '/' ||
-    pathname.startsWith('/download') ||
+    pathname.startsWith('/archives') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
     pathname.startsWith('/images') ||

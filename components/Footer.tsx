@@ -29,7 +29,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-2 text-xs font-semibold text-primary pt-1">
               <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              <span>World Archive & Player Data Live</span>
+              <span>World Archives Available • Next Season Coming Soon</span>
             </div>
           </div>
 
@@ -49,11 +49,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/download"
-                  className="text-muted-foreground hover:text-primary font-medium transition-colors inline-flex items-center gap-1.5"
+                  href="/archives"
+                  className="text-muted-foreground hover:text-primary font-medium transition-colors"
                 >
-                  <span>Download World</span>
-                  <span className="text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded font-bold">6.8 GB</span>
+                  Archives
                 </Link>
               </li>
             </ul>

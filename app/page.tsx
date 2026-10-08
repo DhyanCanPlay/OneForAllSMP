@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from '@/components/Footer'
-import { Download, Sparkles, Server, HardDrive, ArrowRight, Construction } from 'lucide-react'
+import { Sparkles, Server, HardDrive, PartyPopper, HeartHandshake, Archive } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -22,11 +22,11 @@ export default function Home() {
             </span>
           </Link>
           <Link
-            href="/download"
+            href="/archives"
             className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/20 transition-all active:scale-95 shadow-xs"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Download World</span>
+            <Archive className="w-3.5 h-3.5" />
+            <span>Archives</span>
           </Link>
         </div>
       </header>
@@ -39,8 +39,8 @@ export default function Home() {
         <div className="max-w-3xl mx-auto space-y-8">
           {/* Status Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
-            <Construction className="w-4 h-4 animate-bounce" />
-            <span>Under Construction</span>
+            <PartyPopper className="w-4 h-4" />
+            <span>Season Concluded</span>
           </div>
 
           {/* Main Title & Message */}
@@ -50,28 +50,29 @@ export default function Home() {
               <span className="text-primary text-glow">One For All SMP</span>
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              Our server season has officially concluded. To all 552 players who built towns, conquered dungeons, and forged friendships — thank you for being a part of this journey.
+              Our latest season has officially concluded. To all 552 players who built towns, conquered dungeons, and forged friendships — thank you for being a part of this journey.
             </p>
           </div>
 
-          {/* Download Callout Card */}
+          {/* Thank You Callout Card */}
           <div className="bg-card/40 border border-border/60 rounded-2xl p-6 sm:p-8 backdrop-blur-sm max-w-xl mx-auto space-y-4 shadow-xl">
             <div className="flex items-center justify-center gap-2 text-primary font-bold text-sm">
-              <Sparkles className="w-4 h-4" />
-              <span>World Archive Available</span>
+              <HeartHandshake className="w-4 h-4" />
+              <span>Thank You For Trusting Us</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              You can now download the complete singleplayer world save customized with your exact player inventory, armor, stats, and AxVaults ready to play.
+              Thank you for trusting us and downloading the world — the download window is now closed. The next season is coming soon, and we can&apos;t wait to build with you again!
             </p>
             <div className="pt-2">
-              <Link
-                href="/download"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-lg hover:bg-primary/90 glow-green transition-all transform active:scale-95"
+              <a
+                href="https://discord.gg/oneforall"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-xl bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold text-sm tracking-wide shadow-lg transition-all transform active:scale-95"
               >
-                <Download className="w-4 h-4" />
-                <span>Go to Download Page</span>
-                <ArrowRight className="w-4 h-4 opacity-70" />
-              </Link>
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z" /></svg>
+                <span>Join Discord for News</span>
+              </a>
             </div>
           </div>
 
@@ -79,7 +80,7 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground/80 pt-2">
             <div className="flex items-center gap-1.5">
               <HardDrive className="w-3.5 h-3.5 text-primary" />
-              <span>Full 6.8 GB World Save</span>
+              <span>World Safely Archived</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Server className="w-3.5 h-3.5 text-primary" />
@@ -87,7 +88,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-primary" />
-              <span>Minecraft 1.21.x Ready</span>
+              <span>Next Season Coming Soon</span>
             </div>
           </div>
         </div>
